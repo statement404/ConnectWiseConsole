@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ConnectWiseConsole.App/ConnectWiseConsole.App.csproj"/>
+  <Project Path="ConnectWiseConsole.Core/ConnectWiseConsole.Core.csproj"/>
+  <Project Path="ConnectWiseConsole.Tests/ConnectWiseConsole.Tests.csproj"/>
+</Solution>
