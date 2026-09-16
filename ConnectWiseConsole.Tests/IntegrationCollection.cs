@@ -1,3 +1,5 @@
+using ConnectWiseConsole.Tests.Http;
+
 namespace ConnectWiseConsole.Tests;
 
 [CollectionDefinition("Integration")]

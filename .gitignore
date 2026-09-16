@@ -27,5 +27,7 @@ packages/
 *.tmp
 *.temp
 
+ConnectWiseConsole.Tests/json/*.json
+
 
 credentials.yaml

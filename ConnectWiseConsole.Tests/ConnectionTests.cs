@@ -1,5 +1,6 @@
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
+using ConnectWiseConsole.Tests.Http;
 using Xunit;
 using Xunit.Abstractions;
 
