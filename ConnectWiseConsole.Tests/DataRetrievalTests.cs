@@ -1,12 +1,10 @@
 using System.Text.Json;
-using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Core.Serialization;
 using ConnectWiseConsole.Tests.Http;
 using Xunit;
 using Xunit.Abstractions;
-using YamlDotNet.Serialization;
 
 namespace ConnectWiseConsole.Tests;
 
@@ -38,7 +36,7 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
 
         // Act
         var result = await client.GetAsync("system/myMembers/info");
-        var deserializedResult = JsonSerializer.Deserialize<CWMyMember>(result, CwJsonOptions.Default);
+        var deserializedResult = JsonSerializer.Deserialize<CwMyMember>(result, CwJsonOptions.Default);
         
 
         // Assert

@@ -1,6 +1,6 @@
 namespace ConnectWiseConsole.Core.Models;
 
-public class CWMyMember
+public class CwMyMember
 {
     public required int Id { get; set; }
     public required string Identifier { get; set; }
