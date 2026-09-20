@@ -1,4 +1,6 @@
+using System.Net;
 using System.Text.Json;
+using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Core.Serialization;
@@ -29,6 +31,57 @@ public class DataPostTests(IntegrationTestFixture fixture, ITestOutputHelper out
         
 
         output.WriteLine($"{result}");
+    }
+
+    [Fact]
+    public async Task PostAsync_500_TriesOnce()
+    {
+        // Arrange
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var fakeHandler = new SequencedFakeHttpMessageHandler(
+            new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Content = new StringContent("Internal Server Error")
+            },
+            new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("Fake api OK response")
+            });
+        var retryHandler = new RetryHandler { InnerHandler = fakeHandler };
+        var client = new CwHttpClient(retryHandler, credData);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<HttpRequestException>(() =>
+            client.PostAsync("fakepostendpoint", new string[] { "test" }));
+
+        Assert.Equal(1, fakeHandler.CallCount);
+    }
+
+    [Fact]
+    public async Task PostAsync_503_TriesMultipleTimes()
+    {
+        // Arrange
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var fakeHandler = new SequencedFakeHttpMessageHandler(
+            new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.ServiceUnavailable,
+                Content = new StringContent("Service Unavailable")
+            },
+            new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("Fake api OK response")
+            });
+        var retryHandler = new RetryHandler { InnerHandler = fakeHandler };
+        var client = new CwHttpClient(retryHandler, credData);
+
+        // Act & Assert
+        var result = await client.PostAsync("fakepostendpoint", new string[] { "test" });
+
+        Assert.Equal(2, fakeHandler.CallCount);
     }
 
 }

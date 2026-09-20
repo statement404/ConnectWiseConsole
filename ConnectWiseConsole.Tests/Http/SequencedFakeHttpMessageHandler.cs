@@ -2,12 +2,12 @@ namespace ConnectWiseConsole.Tests.Http;
 
 public class SequencedFakeHttpMessageHandler(params HttpResponseMessage[] responses) : HttpMessageHandler
 {
-    private int _callCount = 0;
+    public int CallCount { get; private set; } = 0;
 
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var response = responses[_callCount]; //no try here, as we want this to throw if out of bounds
-        _callCount++;
+        var response = responses[CallCount]; //no try here, as we want this to throw if out of bounds
+        CallCount++;
         return Task.FromResult(response);
     }
 }
