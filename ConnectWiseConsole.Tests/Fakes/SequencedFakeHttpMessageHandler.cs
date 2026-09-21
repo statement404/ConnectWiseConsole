@@ -1,4 +1,4 @@
-namespace ConnectWiseConsole.Tests.Http;
+namespace ConnectWiseConsole.Tests.Fakes;
 
 public class SequencedFakeHttpMessageHandler(params HttpResponseMessage[] responses) : HttpMessageHandler
 {

@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace ConnectWiseConsole.Tests.Http;
+namespace ConnectWiseConsole.Tests.Fakes;
 
 public class FakeHttpMessageHandler(HttpStatusCode statusCode, string responseContent) : HttpMessageHandler
 {

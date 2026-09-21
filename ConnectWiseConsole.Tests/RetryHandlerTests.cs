@@ -1,5 +1,6 @@
 using System.Net;
 using ConnectWiseConsole.Core.Http;
+using ConnectWiseConsole.Tests.Fakes;
 using ConnectWiseConsole.Tests.Http;
 
 namespace ConnectWiseConsole.Tests;
