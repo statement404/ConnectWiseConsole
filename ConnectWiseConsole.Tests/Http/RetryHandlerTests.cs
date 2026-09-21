@@ -4,7 +4,7 @@ using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Tests.Fakes;
 
-namespace ConnectWiseConsole.Tests;
+namespace ConnectWiseConsole.Http.Tests;
 
 public class RetryHandlerTests
 {

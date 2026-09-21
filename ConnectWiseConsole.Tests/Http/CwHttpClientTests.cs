@@ -4,7 +4,7 @@ using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Tests.Fakes;
 using Xunit;
 
-namespace ConnectWiseConsole.Tests;
+namespace ConnectWiseConsole.Http.Tests;
 
 public class CwHttpClientTests
 {
