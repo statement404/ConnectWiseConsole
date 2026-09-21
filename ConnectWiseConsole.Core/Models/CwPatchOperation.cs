@@ -1,3 +1,4 @@
+namespace ConnectWiseConsole.Core.Models;
 public class CwPatchOperation
 {
     public required string Op { get; set; }

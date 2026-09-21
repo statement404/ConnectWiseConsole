@@ -1,5 +1,6 @@
 using System.Text.Json;
 using ConnectWiseConsole.Core.Auth;
+using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Core.Serialization;
 
 namespace ConnectWiseConsole.Core.Http;
