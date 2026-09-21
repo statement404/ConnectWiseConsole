@@ -1,10 +1,11 @@
 using System.Net;
+
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Tests.Fakes;
 
-namespace ConnectWiseConsole.Http.Tests;
+namespace ConnectWiseConsole.Tests.Http;
 
 public class RetryHandlerTests
 {
@@ -50,86 +51,64 @@ public class RetryHandlerTests
     }
 
     [Fact]
-    public async Task PostAsync_500_TriesOnce()
+    public async Task SendAsync_Post500_IsNotRetried()
     {
         // Arrange
-        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
         var fakeHandler = new SequencedFakeHttpMessageHandler(
-            new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent("Internal Server Error")
-            },
-            new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("Fake api OK response")
-            });
+            new HttpResponseMessage(HttpStatusCode.InternalServerError),
+            new HttpResponseMessage(HttpStatusCode.OK));
         var retryHandler = new RetryHandler { InnerHandler = fakeHandler };
-        var client = new CwHttpClient(retryHandler, credData);
+        var invoker = new HttpMessageInvoker(retryHandler);
 
-        // Act & Assert
-        await Assert.ThrowsAsync<HttpRequestException>(() =>
-            client.PostAsync("fakepostendpoint", new string[] { "test" }));
+        // Act
+        var result = await invoker.SendAsync(
+            new HttpRequestMessage(HttpMethod.Post, "http://test/endpoint"),
+            CancellationToken.None);
 
+        // Assert
+        Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
         Assert.Equal(1, fakeHandler.CallCount);
     }
 
     [Fact]
-    public async Task PostAsync_503_TriesMultipleTimes()
+    public async Task SendASync_Post503_TriesMultipleTimes()
     {
-        // Arrange
-        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        //Arrange
         var fakeHandler = new SequencedFakeHttpMessageHandler(
-            new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.ServiceUnavailable,
-                Content = new StringContent("Service Unavailable")
-            },
-            new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("Fake api OK response")
-            });
+            new HttpResponseMessage(HttpStatusCode.ServiceUnavailable),
+            new HttpResponseMessage(HttpStatusCode.OK));
         var retryHandler = new RetryHandler { InnerHandler = fakeHandler };
-        var client = new CwHttpClient(retryHandler, credData);
+        var invoker = new HttpMessageInvoker(retryHandler);
 
-        // Act & Assert
-        var result = await client.PostAsync("fakepostendpoint", new string[] { "test" });
+        // Act
+        var result = await invoker.SendAsync(
+            new HttpRequestMessage(HttpMethod.Post, "http://test/endpoint"),
+            CancellationToken.None);
 
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         Assert.Equal(2, fakeHandler.CallCount);
     }
 
     [Fact]
-    public async Task PatchAsync_500_TriesOnce()
+    public async Task SendASync_Patch500_TriesOnce()
     {
-        //Arrange
-        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
-        var fakeHandler = new SequencedFakeHttpMessageHandler(
-            new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Content = new StringContent("Internal Server Error")
-            },
-            new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("Fake api OK response")
-            });
-        var retryHandler = new RetryHandler { InnerHandler = fakeHandler };
-        var client = new CwHttpClient(retryHandler, credData);
-
-        //Act & Assert
-        await Assert.ThrowsAsync<HttpRequestException>(() =>
-            client.PatchAsync("fakepatchendpoint", new List<CwPatchOperation>{
-                new CwPatchOperation
-                {
-                    Op = "replace",
-                    Path = "testpath",
-                    Value = "testvalue"
-                }
-            }));
         
+        // Arrange
+        var fakeHandler = new SequencedFakeHttpMessageHandler(
+            new HttpResponseMessage(HttpStatusCode.InternalServerError),
+            new HttpResponseMessage(HttpStatusCode.OK));
+        var retryHandler = new RetryHandler { InnerHandler = fakeHandler };
+        var invoker = new HttpMessageInvoker(retryHandler);
+
+        // Act
+        var result = await invoker.SendAsync(
+            new HttpRequestMessage(HttpMethod.Patch, "http://test/endpoint"),
+            CancellationToken.None);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
         Assert.Equal(1, fakeHandler.CallCount);
+        
     }
 }
