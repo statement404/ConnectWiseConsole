@@ -5,9 +5,9 @@ public class CwTicket
     public required int Id { get; set; }
     public required string Summary { get; set; }
     public required CwReference Board { get; set; }
-    public required CwReference WorkType { get; set; }
+    public CwReference? WorkType { get; set; }
     public required CwReference Company { get; set; }
-    public required CwReference Site { get; set; }
+    public CwReference? Site { get; set; }
     public required string SiteName { get; set; }
     public string? AddressLine1 { get; set; }
     public string? AddressLine2 { get; set; }
@@ -19,7 +19,7 @@ public class CwTicket
     public required CwReference Type { get; set; }
     public required CwReference Team { get; set; }
     public required CwReference Priority { get; set; }
-    public required CwReference ServiceLocation { get; set; }
+    public CwReference? ServiceLocation { get; set; }
     public required CwReference Source { get; set; }
     public string? AgreementType { get; set; }
     public required string Severity { get; set; }

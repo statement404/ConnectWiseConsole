@@ -12,58 +12,6 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
 
     [Fact]
     [Trait("Category", "Integration")]
-    public async Task TEMP()
-    {
-        // Arrange
-        var client = fixture.Client;
-
-        // Act
-        var result = await client.GetAsync("service/tickets", new Dictionary<string, string>
-        {
-            ["pageSize"] = "10",
-            ["orderBy"] = "id desc",
-            ["conditions"] = "id = 485116"
-        });
-    
-        output.WriteLine($"{result}");
-    }
-
-    [Fact]
-    [Trait("Category", "Integration")]
-    public async Task TEMP2()
-    {
-        // Arrange
-        var client = fixture.Client;
-
-        // Act
-        var result = await client.GetAsync("service/tickets", new Dictionary<string, string>
-        {
-            ["pageSize"] = "100",
-            ["orderBy"] = "id desc",
-            //["conditions"] = "status/name like 'Active*' AND identifier like 'Roberts*'"
-        });
-    
-        var rawTickets = JsonSerializer.Deserialize<List<JsonElement>>(result, CwJsonOptions.Default)!;
-        var failures = new List<string>();
-
-        foreach (var rawTicket in rawTickets)
-        {
-            try
-            {
-                var ticket = JsonSerializer.Deserialize<CwTicket>(rawTicket.GetRawText(), CwJsonOptions.Default);
-            }
-            catch (JsonException ex)
-            {
-                failures.Add($"Ticket {rawTicket.GetProperty("id")}: {ex.Message}");
-            }
-        }
-
-        foreach (var f in failures) output.WriteLine(f);
-        Assert.Empty(failures);
-    }
-
-    [Fact]
-    [Trait("Category", "Integration")]
     public async Task GetAsync_MyMemberInfo_DeserializesCorrectly()
     {
         // Arrange

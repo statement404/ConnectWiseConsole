@@ -6,22 +6,21 @@ public class CwCompany
     public required string Identifier { get; set; }
     public required string Name { get; set; }
     public required CwReference Status { get; set; }
-    public required string AddressLine1 { get; set; }
+    public string? AddressLine1 { get; set; }
     public string? AddressLine2 { get; set; }
-    public required string City { get; set; }
+    public string? City { get; set; }
     public string? State { get; set; }
-    public required string Zip { get; set; }
-    public required CwReference Country { get; set; }
-    public required string PhoneNumber { get; set; }
-    public required string FaxNumber { get; set; }
-    public required string Website { get; set; }
-    public required CwReference Territory { get; set; }
-    public required CwReference Market { get; set; }
-    public required string AccountNumber { get; set; }
-    public required CwReference DefaultContact { get; set; }
+    public string? Zip { get; set; }
+    public CwReference? Country { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string? FaxNumber { get; set; }
+    public string? Website { get; set; }
+    public CwReference? Territory { get; set; }
+    public CwReference? Market { get; set; }
+    public string? AccountNumber { get; set; }
+    public CwReference? DefaultContact { get; set; }
     public required List<CwReference> Types { get; set; }
     public required CwReference Site { get; set; }
-
     public DateTime? DateAcquired { get; set; }
     public CwReference? SicCode { get; set; }
     public CwReference? ParentCompany { get; set; }

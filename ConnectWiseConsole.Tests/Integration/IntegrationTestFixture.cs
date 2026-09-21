@@ -11,7 +11,7 @@ public class IntegrationTestFixture : IDisposable
     {
         var solutionRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../"));
         var credentialsPath = Path.Combine(solutionRoot, "credentials.yaml");
-        var credProvider = new YamlCredentialProvider(credentialsPath);
+        var credProvider = new CachingCredentialProvider(new YamlCredentialProvider(credentialsPath));
         var client = new CwHttpClient(credProvider);
 
         Client = client;

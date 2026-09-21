@@ -1,5 +1,4 @@
 using ConnectWiseConsole.Core.Auth;
-using Xunit;
 
 namespace ConnectWiseConsole.Tests.Auth;
 
