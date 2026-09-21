@@ -90,4 +90,38 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
         Assert.NotEmpty(deserializedResult);
         output.WriteLine($"First ticket: {deserializedResult[0].Id}"); 
     }
+
+    [Fact]
+    [Trait("Category", "Integration")]
+    public async Task GetAsync_Tickets_AllDeserializeSuccessfully()
+    {
+        // Arrange
+        var client = fixture.Client;
+
+        // Act
+        var result = await client.GetAsync("service/tickets", new Dictionary<string, string>
+        {
+            ["pageSize"] = "1000",
+            ["orderBy"] = "id desc"
+        });
+
+        var rawTickets = JsonSerializer.Deserialize<List<JsonElement>>(result, CwJsonOptions.Default)!;
+        var failures = new List<string>();
+
+        foreach (var rawTicket in rawTickets)
+        {
+            try
+            {
+                var ticket = JsonSerializer.Deserialize<CwTicket>(rawTicket.GetRawText(), CwJsonOptions.Default);
+            }
+            catch (JsonException ex)
+            {
+                failures.Add($"Ticket {rawTicket.GetProperty("id")}: {ex.Message}");
+            }
+        }
+
+        // Assert
+        foreach (var f in failures) output.WriteLine(f);
+        Assert.Empty(failures);
+    }
 }

@@ -16,11 +16,11 @@ public class CwTicket
     public required CwReference Country { get; set; }
     public string? ContactName { get; set; }
     public string? ContactEmailAddress { get; set; }
-    public required CwReference Type { get; set; }
+    public CwReference? Type { get; set; }
     public required CwReference Team { get; set; }
     public required CwReference Priority { get; set; }
     public CwReference? ServiceLocation { get; set; }
-    public required CwReference Source { get; set; }
+    public CwReference? Source { get; set; }
     public string? AgreementType { get; set; }
     public required string Severity { get; set; }
     public required string Impact { get; set; }
@@ -43,7 +43,7 @@ public class CwTicket
     public required CwReference Department { get; set; }
     public required CwReference Sla { get; set; }
     public required string SlaStatus { get; set; }
-    public required bool RequestForChangeFlag { get; set; }
+    public bool? RequestForChangeFlag { get; set; }
     public required DateTime EscalationStartDateUTC { get; set; }
     public required int EscalationLevel { get; set; }
     public required int MinutesBeforeWaiting { get; set; }
@@ -120,7 +120,7 @@ public class CwTicket
     public int? Duration { get; set; }
     public string? MobileGuid { get; set; }
     public CwReference? Currency { get; set; }
-    public CwReference? MergedParentTicket { get; set; }
+    public CwMergedParentTicket? MergedParentTicket { get; set; }
     public List<string>? IntegratorTags { get; set; }
     public string? RespondedBy { get; set; }
     public string? ResplanBy { get; set; }
