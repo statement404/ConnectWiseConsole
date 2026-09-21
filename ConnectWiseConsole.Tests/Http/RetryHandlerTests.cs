@@ -1,8 +1,6 @@
 using System.Net;
 
-using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
-using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Tests.Fakes;
 
 namespace ConnectWiseConsole.Tests.Http;
@@ -71,7 +69,7 @@ public class RetryHandlerTests
     }
 
     [Fact]
-    public async Task SendASync_Post503_TriesMultipleTimes()
+    public async Task SendAsync_Post503_TriesMultipleTimes()
     {
         //Arrange
         var fakeHandler = new SequencedFakeHttpMessageHandler(
@@ -91,7 +89,7 @@ public class RetryHandlerTests
     }
 
     [Fact]
-    public async Task SendASync_Patch500_TriesOnce()
+    public async Task SendAsync_Patch500_TriesOnce()
     {
         
         // Arrange
