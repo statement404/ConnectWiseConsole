@@ -3,10 +3,8 @@ using System.Text.Json;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
-using ConnectWiseConsole.Core.Serialization;
 using ConnectWiseConsole.Tests.Fakes;
-using ConnectWiseConsole.Tests.Http;
-using Xunit;
+using ConnectWiseConsole.Tests.Integration;
 using Xunit.Abstractions;
 
 namespace ConnectWiseConsole.Tests;

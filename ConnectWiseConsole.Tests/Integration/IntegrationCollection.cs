@@ -1,6 +1,4 @@
-using ConnectWiseConsole.Tests.Http;
-
-namespace ConnectWiseConsole.Tests;
+namespace ConnectWiseConsole.Tests.Integration;
 
 [CollectionDefinition("Integration")]
 public class IntegrationCollection : ICollectionFixture<IntegrationTestFixture>

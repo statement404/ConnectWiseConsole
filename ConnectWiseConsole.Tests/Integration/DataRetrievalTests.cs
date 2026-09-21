@@ -1,12 +1,10 @@
 using System.Text.Json;
-using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Core.Serialization;
-using ConnectWiseConsole.Tests.Http;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ConnectWiseConsole.Tests;
+namespace ConnectWiseConsole.Tests.Integration;
 
 [Collection("Integration")]
 public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelper output)

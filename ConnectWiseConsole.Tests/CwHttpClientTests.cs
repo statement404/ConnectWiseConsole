@@ -2,7 +2,6 @@ using System.Net;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Tests.Fakes;
-using ConnectWiseConsole.Tests.Http;
 using Xunit;
 
 namespace ConnectWiseConsole.Tests;

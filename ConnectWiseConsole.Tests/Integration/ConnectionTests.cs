@@ -1,10 +1,9 @@
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
-using ConnectWiseConsole.Tests.Http;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ConnectWiseConsole.Tests;
+namespace ConnectWiseConsole.Tests.Integration;
 
 [Collection("Integration")]
 public class ConnectionTests(IntegrationTestFixture fixture, ITestOutputHelper output)

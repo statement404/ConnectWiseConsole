@@ -5,7 +5,7 @@ using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Core.Serialization;
 using ConnectWiseConsole.Tests.Fakes;
-using ConnectWiseConsole.Tests.Http;
+using ConnectWiseConsole.Tests.Integration;
 using Xunit;
 using Xunit.Abstractions;
 

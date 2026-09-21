@@ -1,7 +1,7 @@
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 
-namespace ConnectWiseConsole.Tests.Http;
+namespace ConnectWiseConsole.Tests.Integration;
 
 public class IntegrationTestFixture : IDisposable
 {
