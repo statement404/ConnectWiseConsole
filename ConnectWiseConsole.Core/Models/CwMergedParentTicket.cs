@@ -1,4 +1,4 @@
-namespace ConnectWiseConsole.Core.Models;   
+namespace ConnectWiseConsole.Core.Models;
 
 public class CwMergedParentTicket
 {
