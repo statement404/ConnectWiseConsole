@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Models;
@@ -32,27 +33,46 @@ public class CwHttpClient : IDisposable
         }
         
         var response = await _httpClient.GetAsync(endpoint);
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        return content;
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new CwApiException(response.StatusCode, responseContent);
+        }
+        
+        return responseContent;
     }
 
     public async Task<string> PatchAsync(string endpoint, List<CwPatchOperation> operations)
     {
         var json = JsonSerializer.Serialize(operations, CwJsonOptions.Default);
         var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        
         var response = await _httpClient.PatchAsync(endpoint, content);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsStringAsync();
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new CwApiException(response.StatusCode, responseContent);
+        }
+        
+        return responseContent;
     }
 
     public async Task<string> PostAsync<T>(string endpoint, T body)
     {
         var json = JsonSerializer.Serialize(body, CwJsonOptions.Default);
         var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        
         var response = await _httpClient.PostAsync(endpoint, content);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsStringAsync();
+        var responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new CwApiException(response.StatusCode, responseContent);
+        }
+        
+        return responseContent;
     }
 
     public void Dispose()
