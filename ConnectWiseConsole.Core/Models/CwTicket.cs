@@ -2,58 +2,60 @@ namespace ConnectWiseConsole.Core.Models;
 
 public class CwTicket
 {
+    //These 4 items are required, rest are nullable until further testing can fully prove they are always available.
     public required int Id { get; set; }
     public required string Summary { get; set; }
     public required CwReference Board { get; set; }
-    public CwReference? WorkType { get; set; }
     public required CwReference Company { get; set; }
+
+    public CwReference? WorkType { get; set; }
     public CwReference? Site { get; set; }
-    public required string SiteName { get; set; }
+    public string? SiteName { get; set; }
     public string? AddressLine1 { get; set; }
     public string? AddressLine2 { get; set; }
     public string? City { get; set; }
     public string? StateIdentifier { get; set; }
-    public required CwReference Country { get; set; }
+    public CwReference? Country { get; set; }
     public string? ContactName { get; set; }
     public string? ContactEmailAddress { get; set; }
     public CwReference? Type { get; set; }
-    public required CwReference Team { get; set; }
-    public required CwReference Priority { get; set; }
+    public CwReference? Team { get; set; }
+    public CwReference? Priority { get; set; }
     public CwReference? ServiceLocation { get; set; }
     public CwReference? Source { get; set; }
     public string? AgreementType { get; set; }
-    public required string Severity { get; set; }
-    public required string Impact { get; set; }
-    public required bool AutomaticEmailContactFlag { get; set; }
-    public required bool AutomaticEmailResourceFlag { get; set; }
-    public required bool AutomaticEmailCcFlag { get; set; }
+    public string? Severity { get; set; }
+    public string? Impact { get; set; }
+    public bool? AutomaticEmailContactFlag { get; set; }
+    public bool? AutomaticEmailResourceFlag { get; set; }
+    public bool? AutomaticEmailCcFlag { get; set; }
     public string? AutomaticEmailCc { get; set; }
-    public required bool ClosedFlag { get; set; }
-    public required bool Approved { get; set; }
-    public required int ResolveMinutes { get; set; }
-    public required int ResPlanMinutes { get; set; }
-    public required int RespondMinutes { get; set; }
+    public bool? ClosedFlag { get; set; }
+    public bool? Approved { get; set; }
+    public int? ResolveMinutes { get; set; }
+    public int? ResPlanMinutes { get; set; }
+    public int? RespondMinutes { get; set; }
     public DateTime? RespondByGoalUTC { get; set; }
     public DateTime? ResplanGoalUTC { get; set; }
     public DateTime? ResolutionGoalUTC { get; set; }
-    public required bool IsInSla { get; set; }
-    public required bool HasChildTicket { get; set; }
+    public bool? IsInSla { get; set; }
+    public bool? HasChildTicket { get; set; }
     public bool? HasMergedChildTicketFlag { get; set; }
-    public required CwReference Location { get; set; }
-    public required CwReference Department { get; set; }
-    public required CwReference Sla { get; set; }
-    public required string SlaStatus { get; set; }
+    public CwReference? Location { get; set; }
+    public CwReference? Department { get; set; }
+    public CwReference? Sla { get; set; }
+    public string? SlaStatus { get; set; }
     public bool? RequestForChangeFlag { get; set; }
-    public required DateTime EscalationStartDateUTC { get; set; }
-    public required int EscalationLevel { get; set; }
-    public required int MinutesBeforeWaiting { get; set; }
-    public required int RespondedSkippedMinutes { get; set; }
-    public required int ResplanSkippedMinutes { get; set; }
-    public required double RespondedHours { get; set; }
-    public required double ResplanHours { get; set; }
-    public required double ResolutionHours { get; set; }
-    public required int MinutesWaiting { get; set; }
-    public required CwCustomField[] CustomFields { get; set; }
+    public DateTime? EscalationStartDateUTC { get; set; }
+    public int? EscalationLevel { get; set; }
+    public int? MinutesBeforeWaiting { get; set; }
+    public int? RespondedSkippedMinutes { get; set; }
+    public int? ResplanSkippedMinutes { get; set; }
+    public double? RespondedHours { get; set; }
+    public double? ResplanHours { get; set; }
+    public double? ResolutionHours { get; set; }
+    public int? MinutesWaiting { get; set; }
+    public CwCustomField[]? CustomFields { get; set; }
 
     public string? RecordType { get; set; }
     public CwReference? Status { get; set; }

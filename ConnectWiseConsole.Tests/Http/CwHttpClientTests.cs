@@ -30,7 +30,7 @@ public class CwHttpClientTests
         var fakeHandler = new FakeHttpMessageHandler(HttpStatusCode.NotFound, "not found");
         var client = new CwHttpClient(fakeHandler, credData);
 
-        await Assert.ThrowsAsync<HttpRequestException>(() => client.GetAsync("some/endpoint"));
+        await Assert.ThrowsAsync<CwApiException>(() => client.GetAsync("some/endpoint"));
     }
 
     [Fact]
