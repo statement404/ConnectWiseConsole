@@ -1,5 +1,3 @@
-using System.Net;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Models;
@@ -103,7 +101,6 @@ public class CwHttpClient : IDisposable
         }
         
         return responseContent;
-        
     }
 
     public void Dispose()
