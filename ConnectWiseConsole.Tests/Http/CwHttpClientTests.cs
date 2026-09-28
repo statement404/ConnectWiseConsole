@@ -89,4 +89,27 @@ public class CwHttpClientTests
         Assert.Equal(HttpStatusCode.BadRequest, ex.StatusCode);
         Assert.Equal(errorBody, ex.ResponseBody);
     }
+
+    [Fact]
+    public async Task GetResponseAsync_ReturnsStatusBodyAndHeaders()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("[]")
+        };
+        response.Headers.Add("Link", "<https://example.com/next>; rel=\"next\"");
+
+        var fakeHandler = new SequencedFakeHttpMessageHandler(response);
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var client = new CwHttpClient(fakeHandler, credData);
+
+        // Act
+        var result = await client.GetResponseAsync("service/tickets");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        Assert.Equal("[]", result.Body);
+        Assert.Equal("<https://example.com/next>; rel=\"next\"", result.Headers["link"].Single());
+    }
 }

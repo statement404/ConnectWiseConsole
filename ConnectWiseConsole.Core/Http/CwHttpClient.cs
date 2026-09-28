@@ -1,4 +1,5 @@
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Models;
@@ -33,7 +34,7 @@ public class CwHttpClient : IDisposable
         _httpClient.BaseAddress = new Uri(baseUrl);
     }
 
-    public async Task<string> GetAsync(string endpoint, Dictionary<string, string>? queryParams = null, CancellationToken cancellationToken = default)
+    public async Task<CwResponse> GetResponseAsync(string endpoint, Dictionary<string, string>? queryParams = null, CancellationToken cancellationToken = default)
     {
         endpoint = NormalizeEndpoint(endpoint);
 
@@ -43,16 +44,29 @@ public class CwHttpClient : IDisposable
                 $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
             endpoint = $"{endpoint}?{query}";
         }
-        
-        var response = await _httpClient.GetAsync(endpoint, cancellationToken);
-        var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-        if (!response.IsSuccessStatusCode)
+        using var response = await _httpClient.GetAsync(endpoint, cancellationToken);
+        var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+        var responseHeaders = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var header in response.Headers)
         {
-            throw new CwApiException(response.StatusCode, responseContent);
+            responseHeaders[header.Key] = [.. header.Value];
+        }
+
+        return new CwResponse(response.StatusCode, responseHeaders, responseContent);
+    }
+
+    public async Task<string> GetAsync(string endpoint, Dictionary<string, string>? queryParams = null, CancellationToken cancellationToken = default)
+    {
+        var response = await GetResponseAsync(endpoint, queryParams, cancellationToken);
+
+        if (!response.IsSuccess)
+        {
+            throw new CwApiException(response.StatusCode, response.Body);
         }
         
-        return responseContent;
+        return response.Body;
     }
 
     public async Task<string> PatchAsync(string endpoint, List<CwPatchOperation> operations, CancellationToken cancellationToken = default)
@@ -89,6 +103,7 @@ public class CwHttpClient : IDisposable
         }
         
         return responseContent;
+        
     }
 
     public void Dispose()
