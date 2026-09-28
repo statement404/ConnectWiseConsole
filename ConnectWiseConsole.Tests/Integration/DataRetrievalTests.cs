@@ -43,7 +43,7 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
         // Assert
         Assert.NotNull(deserializedResult);
         Assert.NotEmpty(deserializedResult);
-        output.WriteLine($"First board: {deserializedResult[0].Name}"); 
+        output.WriteLine($"First board: {deserializedResult[0].Name}");
     }
 
 
@@ -66,7 +66,7 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
         // Assert
         Assert.NotNull(deserializedResult);
         Assert.NotEmpty(deserializedResult);
-        output.WriteLine($"First company: {deserializedResult[0].Name}"); 
+        output.WriteLine($"First company: {deserializedResult[0].Name}");
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
         // Assert
         Assert.NotNull(deserializedResult);
         Assert.NotEmpty(deserializedResult);
-        output.WriteLine($"First ticket: {deserializedResult[0].Id}"); 
+        output.WriteLine($"First ticket: {deserializedResult[0].Id}");
     }
 
     [Fact]
@@ -123,5 +123,29 @@ public class DataRetrievalTests(IntegrationTestFixture fixture, ITestOutputHelpe
         // Assert
         foreach (var f in failures) output.WriteLine(f);
         Assert.Empty(failures);
+    }
+
+    [Fact]
+    [Trait("Category", "Integration")]
+    public async Task GetAsync_Tickets_ReturnsHeaders()
+    {
+        // Arrange
+        var client = fixture.Client;
+
+        // Act
+        var result = await client.GetResponseAsync("service/tickets", new Dictionary<string, string>
+        {
+            ["pageSize"] = "1",
+            ["page"] = "342610",
+            ["orderBy"] = "id desc"
+        });
+
+        if (result.Headers["Link"] is not null)
+        {
+            output.WriteLine($"{result.Headers["Link"][0]}");
+        }
+
+        // Assert
+        Assert.NotEmpty(result.Headers);
     }
 }
