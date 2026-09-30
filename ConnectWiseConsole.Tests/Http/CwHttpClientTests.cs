@@ -1,8 +1,10 @@
 using System.Net;
+using System.Net.Http.Headers;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Http;
 using ConnectWiseConsole.Core.Models;
 using ConnectWiseConsole.Tests.Fakes;
+using Xunit.Abstractions;
 
 namespace ConnectWiseConsole.Tests.Http;
 
@@ -111,5 +113,117 @@ public class CwHttpClientTests
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         Assert.Equal("[]", result.Body);
         Assert.Equal("<https://example.com/next>; rel=\"next\"", result.Headers["link"].Single());
+    }
+
+    [Fact]
+    public async Task GetAllPages_StopsWhenNextIsNull()
+    {
+        // Arrange
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var fakeHandler = new FakeHttpMessageHandler(HttpStatusCode.OK, "fake api response ok");
+        var client = new CwHttpClient(fakeHandler, credData);
+
+        // Act
+        var response = await client.GetAllPagesAsync("test/endpoint");
+
+        // Assert
+        Assert.Single(response);
+        Assert.Equal("fake api response ok", response[0]);
+    }
+
+    [Fact]
+    public async Task GetAllPages_ReturnsCorrectNumberInOrder()
+    {
+        // Arrange
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var fakeHandler = new SequencedFakeHttpMessageHandler(
+            [
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("1"),
+                    Headers = { { "Link", "<https://linkto2>; rel=\"next\"" } }
+                },
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("2"),
+                    Headers = { { "Link", "<https://linkto3>; rel=\"next\"" } }
+                },
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("3"),
+                    Headers = { { "Link", "<https://linkto4>; rel=\"next\"" } }
+                },
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("4")
+                },
+
+            ]
+        );
+        var client = new CwHttpClient(fakeHandler, credData);
+
+        // Act
+        var response = await client.GetAllPagesAsync("test/endpoint");
+
+        // Assert
+        Assert.Equal(4, response.Count);
+        Assert.Equal(["1", "2", "3", "4"], response);
+    }
+
+    [Fact]
+    public async Task GetAllPages_StopsAtMaxPages()
+    {
+        // Arrange
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var responses = new HttpResponseMessage[CwHttpClient.MaxPages + 5];
+        for (int i = 0; i < responses.Length; i++)
+        {
+            responses[i] = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent($"{i + 1}"),
+                Headers = { { "Link", $"<https://linkto{i + 1}>; rel=\"next\"" } }
+            };
+        }
+        var fakeHandler = new SequencedFakeHttpMessageHandler(responses);
+        var client = new CwHttpClient(fakeHandler, credData);
+
+        // Act
+        await Assert.ThrowsAsync<InvalidOperationException>(() => client.GetAllPagesAsync("test/endpoint"));
+
+        // Assert
+        Assert.Equal(CwHttpClient.MaxPages, fakeHandler.CallCount);
+    }
+
+    [Fact]
+    public async Task GetAllPages_ReturnsCWApiException()
+    {
+        // Arrange
+        var credData = new YamlCredentialProvider("TestData/test-credentials.yaml");
+        var fakeHandler = new SequencedFakeHttpMessageHandler(
+            [
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("1"),
+                    Headers = { { "Link", "<https://linkto2>; rel=\"next\"" } }
+                },
+                new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent("2")
+                },
+                new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("3")
+                }
+
+            ]
+        );
+        var client = new CwHttpClient(fakeHandler, credData);
+
+        // Act
+        var ex = await Assert.ThrowsAsync<CwApiException>(() => client.GetAllPagesAsync("test/endpoint"));
+
+        // Assert
+        Assert.Equal("2", ex.ResponseBody);
+        Assert.Equal(2, fakeHandler.CallCount);
     }
 }
