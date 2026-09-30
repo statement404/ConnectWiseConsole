@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.Json;
 using ConnectWiseConsole.Core.Auth;
 using ConnectWiseConsole.Core.Models;
@@ -36,6 +35,8 @@ public class CwHttpClient : IDisposable
 
     public async Task<List<string>> GetAllPagesAsync(string endpoint, Dictionary<string, string>? queryParams = null, CancellationToken cancellationToken = default)
     {
+        //May wish to come back later and explor extracting the total pages from the 'last' link in order to quickly establish if the result will be too big so we can bail on first call
+
         List<string> result = [];
         Uri? nextUri = null;
         var pageCount = 0;
